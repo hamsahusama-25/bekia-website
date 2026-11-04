@@ -35,7 +35,7 @@ A full-stack B2B waste management platform that connects companies, waste collec
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/USERNAME/loop-eco.git
+git clone https://github.com/hamsahusama-25/bekia-website.git
 cd loop-eco
 
 # 2. Configure environment variables
