@@ -10,7 +10,7 @@ export function Shell({ title, user, onLogout, children, wide = false }) {
           <div className="flex items-center gap-2">
             <span aria-hidden="true" className="inline-block h-6 w-6 rounded-md bg-brand" />
             <span className="font-bold">Loop Eco</span>
-            <span className="text-sm text-slate-300">· {title}</span>
+            <span className="text-sm text-slate-300"> {title}</span>
           </div>
           <div className="flex items-center gap-3 text-sm">
             {user && <span className="hidden text-slate-300 sm:inline">{user}</span>}
@@ -22,14 +22,14 @@ export function Shell({ title, user, onLogout, children, wide = false }) {
           </div>
         </div>
       </header>
-      <main className={`mx-auto space-y-4 px-4 py-6 ${wide ? 'max-w-6xl' : 'max-w-3xl'}`}>{children}</main>
+      <main className={`mx-auto space-y-4 px-4 py-6 ${wide ? 'max-w-full' : 'max-w-3xl'}`}>{children}</main>
     </div>
   );
 }
 
 export function Card({ title, children, className = '' }) {
   return (
-    <section className={`rounded-xl border border-slate-200 bg-white p-4 shadow-sm ${className}`}>
+    <section className={`rounded-xl border border-slate-200 bg-white p-8 shadow-sm ${className}`}>
       {title && <h2 className="mb-3 text-lg font-bold">{title}</h2>}
       {children}
     </section>
