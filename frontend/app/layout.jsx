@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Loop Eco',
+  title: 'Bekia - منصة إدارة المخلفات وإعادة التدوير للشركات  ',
   description: 'منصة إدارة المخلفات وإعادة التدوير للشركات',
 };
 
