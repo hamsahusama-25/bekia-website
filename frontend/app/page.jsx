@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     const s = getSession();
-    router.replace(s ? HOME[s.user.role] || '/login' : '/login');
+    router.replace(s ? HOME[s.user.role] || '/landing' : '/landing');
   }, [router]);
   return <Loading />;
 }
