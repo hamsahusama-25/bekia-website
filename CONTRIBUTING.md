@@ -1,3 +1,133 @@
+# Contributing Guidelines
+
+Welcome to the **Smart Waste Management Project!**
+
+This document defines the development workflow, contribution rules, and code quality standards that all team members must follow.
+
+## 1. Branch Naming Convention
+
+All developers must create a separate branch for each task.
+
+| Prefix | Purpose |
+|---|---|
+| `feat/` | New features |
+| `fix/` | Bug fixes |
+| `docs/` | Documentation |
+| `test/` | Tests |
+| `refactor/` | Code improvements |
+
+### Examples
+
+```bash
+feat/user-registration
+feat/collection-request
+fix/weight-validation
+docs/api-contract
+test/weight-validation
+refactor/auth-service
+```
+
+## 2. Commit Message Convention
+
+Use the following format:
+
+```text
+type(scope): description
+```
+
+### Examples
+
+```text
+feat(auth): add subscription registration
+feat(collection): create waste request
+fix(weight): correct variance calculation
+docs(api): update API contract
+test(weight): add validation test cases
+refactor(auth): improve authentication service
+```
+
+**Guidelines:**
+- Use clear and meaningful commit messages.
+- Keep commits small and focused on a single task.
+- Use the appropriate type and scope.
+- Write descriptions in the imperative form.
+
+## 3. Pull Request Rules
+
+All contributions must follow this workflow:
+
+1. Create a feature branch from `main`.
+2. Implement and test your changes.
+3. Push your branch to GitHub.
+4. Open a Pull Request (PR) targeting `main`.
+5. Provide a clear description of your changes.
+6. Link the related User Story or task ID.
+7. Request at least one team member to review the code.
+8. Merge only after approval and successful checks.
+
+**Important:** Do not merge your Pull Request before completing the required review and checks.
+
+## 4. Code Review Rules
+
+Reviewers should verify the following:
+
+- Code correctness and readability.
+- Compliance with the project architecture.
+- Proper input validation and error handling.
+- Authentication and authorization where required.
+- No exposed credentials or sensitive information.
+- Appropriate implementation of the related User Story.
+
+## 5. Testing Requirements
+
+Before opening a Pull Request:
+
+- Run the relevant tests.
+- Include positive and negative test cases.
+- Verify API responses and database operations.
+- Check that the implemented functionality works as expected.
+- Fix failing tests before merging.
+- Ensure that existing functionality is not broken.
+
+## 6. General Rules
+
+- Do not push directly to `main`.
+- Create a separate branch for each task.
+- Keep commits small and meaningful.
+- Avoid committing `.env` files or secrets.
+- Keep documentation updated when necessary.
+- Follow the agreed project architecture and coding standards.
+- Communicate blockers and dependencies with the team.
+- Coordinate with team members before making changes that affect shared components.
+
+## 7. Contribution Workflow
+
+```text
+main
+ |
+ |-- Create task branch
+ |
+ |-- Implement changes
+ |
+ |-- Run tests
+ |
+ |-- Commit changes
+ |
+ |-- Push branch to GitHub
+ |
+ |-- Open Pull Request
+ |
+ |-- Code Review
+ |
+ |-- Approval & Successful Checks
+ |
+ |-- Merge into main
+```
+
+**Thank you for contributing to the Smart Waste Management Project!**
+
+
+
 # CONTRIBUTING — دليل الفريق
 
 دليل تشغيل المشروع وقواعد العمل عليه. الهدف: أي عضو جديد يشغّل المشروع كله في أقل من 10 دقائق.
