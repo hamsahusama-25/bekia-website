@@ -6,23 +6,37 @@ export function Shell({ title, user, onLogout, children, wide = false }) {
   return (
     <div className="min-h-screen">
       <header className="bg-ink text-white">
-        <div className={`mx-auto flex items-center justify-between px-4 py-3 ${wide ? 'max-w-6xl' : 'max-w-3xl'}`}>
+        <div
+          className={`mx-auto flex items-center justify-between px-4 py-3 ${wide ? "max-w-6xl" : "max-w-3xl"}`}
+        >
           <div className="flex items-center gap-2">
-            <span aria-hidden="true" className="inline-block h-6 w-6 rounded-md bg-brand" />
-            <span className="font-bold">Loop Eco</span>
+            <span
+              aria-hidden="true"
+              className="inline-block font-bold text-center h-6 w-6 rounded-md bg-brand"
+            >B </span>
+            <span className="font-bold">Pickea</span>
             <span className="text-sm text-slate-300"> {title}</span>
           </div>
           <div className="flex items-center gap-3 text-sm">
-            {user && <span className="hidden text-slate-300 sm:inline">{user}</span>}
+            {user && (
+              <span className="hidden text-slate-300 sm:inline">{user}</span>
+            )}
             {onLogout && (
-              <button onClick={onLogout} className="rounded-md border border-slate-500 px-3 py-1 hover:bg-slate-700">
+              <button
+                onClick={onLogout}
+                className="rounded-md border border-slate-500 px-3 py-1 hover:bg-slate-700"
+              >
                 خروج
               </button>
             )}
           </div>
         </div>
       </header>
-      <main className={`mx-auto space-y-4 px-4 py-6 ${wide ? 'max-w-full' : 'max-w-3xl'}`}>{children}</main>
+      <main
+        className={`mx-auto space-y-4 px-4 py-6 ${wide ? "max-w-full" : "max-w-3xl"}`}
+      >
+        {children}
+      </main>
     </div>
   );
 }
