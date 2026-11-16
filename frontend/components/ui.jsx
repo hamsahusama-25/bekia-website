@@ -1,8 +1,13 @@
-'use client';
+"use client";
 
-import { useId } from 'react';
+import { useId } from "react";
 
 export function Shell({ title, user, onLogout, children, wide = false }) {
+  const userInitial =
+    typeof user === "string" && user.trim()
+      ? user.trim().charAt(0).toUpperCase()
+      : "U";
+
   return (
     <div className="min-h-screen">
       <header className="bg-ink text-white">
@@ -41,9 +46,11 @@ export function Shell({ title, user, onLogout, children, wide = false }) {
   );
 }
 
-export function Card({ title, children, className = '' }) {
+export function Card({ title, children, className = "" }) {
   return (
-    <section className={`rounded-xl border border-slate-200 bg-white p-8 shadow-sm ${className}`}>
+    <section
+      className={`rounded-xl border border-slate-200 bg-white p-8 shadow-sm ${className}`}
+    >
       {title && <h2 className="mb-3 text-lg font-bold">{title}</h2>}
       {children}
     </section>
@@ -72,11 +79,11 @@ export function Field({ label, hint, error, children, ...props }) {
   );
 }
 
-export function Button({ variant = 'primary', className = '', ...props }) {
+export function Button({ variant = "primary", className = "", ...props }) {
   const styles = {
-    primary: 'bg-brand text-white hover:bg-brand-dark',
-    danger: 'border border-alert text-alert hover:bg-red-50',
-    ghost: 'border border-slate-300 hover:bg-slate-100',
+    primary: "bg-brand text-white hover:bg-brand-dark",
+    danger: "border border-alert text-alert hover:bg-red-50",
+    ghost: "border border-slate-300 hover:bg-slate-100",
   };
   return (
     <button
@@ -86,21 +93,24 @@ export function Button({ variant = 'primary', className = '', ...props }) {
   );
 }
 
-export function Alert({ kind = 'error', children }) {
+export function Alert({ kind = "error", children }) {
   if (!children) return null;
   const styles = {
-    error: 'border-red-200 bg-red-50 text-red-800',
-    success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-    info: 'border-slate-200 bg-slate-50 text-slate-700',
+    error: "border-red-200 bg-red-50 text-red-800",
+    success: "border-emerald-200 bg-emerald-50 text-emerald-800",
+    info: "border-slate-200 bg-slate-50 text-slate-700",
   };
   return (
-    <div role={kind === 'error' ? 'alert' : 'status'} className={`rounded-lg border px-3 py-2 text-sm ${styles[kind]}`}>
+    <div
+      role={kind === "error" ? "alert" : "status"}
+      className={`rounded-lg border px-3 py-2 text-sm ${styles[kind]}`}
+    >
       {children}
     </div>
   );
 }
 
-export function Loading({ label = 'جاري التحميل...' }) {
+export function Loading({ label = "جاري التحميل..." }) {
   return <p className="py-8 text-center text-slate-500">{label}</p>;
 }
 
@@ -109,23 +119,28 @@ export function Empty({ children }) {
 }
 
 export const LEVEL_STYLE = {
-  Bronze: 'bg-amber-100 text-amber-800',
-  Silver: 'bg-slate-200 text-slate-800',
-  Gold: 'bg-yellow-200 text-yellow-900',
+  Bronze: "bg-amber-100 text-amber-800",
+  Silver: "bg-slate-200 text-slate-800",
+  Gold: "bg-yellow-200 text-yellow-900",
 };
 
 export const FREQUENCY_AR = {
-  twice_weekly: 'مرتين في الأسبوع',
-  weekly: 'مرة في الأسبوع',
-  biweekly: 'مرة كل أسبوعين',
-  monthly: 'مرة في الشهر',
+  twice_weekly: "مرتين في الأسبوع",
+  weekly: "مرة في الأسبوع",
+  biweekly: "مرة كل أسبوعين",
+  monthly: "مرة في الشهر",
 };
 
-export const TRASH_AR = { plastic: 'بلاستيك', paper: 'ورق', glass: 'زجاج', metal: 'معادن / كانزات' };
+export const TRASH_AR = {
+  plastic: "بلاستيك",
+  paper: "ورق",
+  glass: "زجاج",
+  metal: "معادن / كانزات",
+};
 
 export const STATUS_AR = {
-  SCHEDULED: 'مجدولة',
-  PENDING_REVIEW: 'في انتظار الاعتماد',
-  COMPLETED: 'مكتملة',
-  NO_SHOW: 'عدم استجابة',
+  SCHEDULED: "مجدولة",
+  PENDING_REVIEW: "في انتظار الاعتماد",
+  COMPLETED: "مكتملة",
+  NO_SHOW: "عدم استجابة",
 };
