@@ -1,6 +1,26 @@
 "use client";
 
 import { useId } from "react";
+import { LogOut } from "lucide-react";
+
+function PickeaLogo() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-brand">
+        <svg viewBox="0 0 40 40" fill="none" className="size-8" aria-hidden="true">
+          <path d="M30.5 13.5A12.5 12.5 0 0 0 8 17" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+          <path d="M8 9.5V17h7.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M9.5 26.5A12.5 12.5 0 0 0 32 23" stroke="#84CC16" strokeWidth="3.5" strokeLinecap="round" />
+          <path d="M32 30.5V23h-7.5" stroke="#84CC16" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M20 25c-5-5 0-12 8-13-1 8-5 13-8 13Z" fill="#10B981" />
+        </svg>
+      </div>
+      <span className="font-heading text-xl font-extrabold text-slate-900">
+        Pickea
+      </span>
+    </div>
+  );
+}
 
 export function Shell({ title, user, onLogout, children, wide = false }) {
   const userInitial =
@@ -9,39 +29,62 @@ export function Shell({ title, user, onLogout, children, wide = false }) {
       : "U";
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-ink text-white">
-        <div
-          className={`mx-auto flex items-center justify-between px-4 py-3 ${wide ? "max-w-6xl" : "max-w-3xl"}`}
-        >
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden="true"
-              className="inline-block font-bold text-center h-6 w-6 rounded-md bg-brand"
-            >B </span>
-            <span className="font-bold">Pickea</span>
-            <span className="text-sm text-slate-300"> {title}</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            {user && (
-              <span className="hidden text-slate-300 sm:inline">{user}</span>
-            )}
-            {onLogout && (
-              <button
-                onClick={onLogout}
-                className="rounded-md border border-slate-500 px-3 py-1 hover:bg-slate-700"
-              >
-                خروج
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
-      <main
-        className={`mx-auto space-y-4 px-4 py-6 ${wide ? "max-w-full" : "max-w-3xl"}`}
+    <div className="min-h-screen bg-slate-50 p-3 sm:p-4">
+      <div
+        className={`mx-auto flex min-h-[calc(100vh-1.5rem)] flex-col gap-4 sm:min-h-[calc(100vh-2rem)] ${
+          wide ? "max-w-[1600px]" : "max-w-3xl"
+        }`}
       >
-        {children}
-      </main>
+        <header className="sticky top-3 z-40 h-[72px] shrink-0 rounded-3xl border border-emerald-500 bg-white/90 shadow-sm backdrop-blur-md sm:top-4">
+          <div className="flex h-full items-center justify-between gap-4 px-4 sm:px-6">
+            <div className="flex min-w-0 items-center gap-3">
+              <PickeaLogo />
+              {title && (
+                <>
+                  <div className="mx-1 hidden h-8 w-px bg-slate-200 sm:block" />
+                  <h1 className="hidden truncate font-heading text-lg font-bold text-slate-800 sm:block">
+                    {title}
+                  </h1>
+                </>
+              )}
+            </div>
+
+            <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+              {user && (
+                <div className="flex items-center gap-3">
+                  <span className="hidden max-w-44 truncate text-base font-semibold text-slate-700 sm:block">
+                    {user}
+                  </span>
+                  <div
+                    role="img"
+                    aria-label={typeof user === "string" ? user : "المستخدم"}
+                    title={typeof user === "string" ? user : undefined}
+                    className="flex size-10 items-center justify-center rounded-full bg-emerald-100 text-base font-bold text-emerald-800"
+                  >
+                    {userInitial}
+                  </div>
+                </div>
+              )}
+
+              {user && onLogout && <div className="h-8 w-px bg-slate-200" />}
+
+              {onLogout && (
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  aria-label="تسجيل الخروج"
+                  className="flex h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 text-base font-semibold text-slate-600 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                >
+                  <LogOut className="size-5 -scale-x-100" />
+                  <span className="hidden sm:inline">خروج</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <main className="w-full flex-1 space-y-4">{children}</main>
+      </div>
     </div>
   );
 }
