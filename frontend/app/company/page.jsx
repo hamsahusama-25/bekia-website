@@ -35,7 +35,7 @@ function Dashboard({ data }) {
   const pct = Math.min(100, rawPct);
 
   return (
-    <>
+    <div className="@container space-y-4">
       <Card>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
@@ -53,28 +53,32 @@ function Dashboard({ data }) {
         </p>
       </Card>
 
-      <Card title="الزيارة القادمة">
-        {nextPickup ? (
-          <div className="grid items-center gap-5 sm:grid-cols-[1fr_auto]">
-            <div className="space-y-2">
-              <Row label="الموعد:" value={fmtDate(nextPickup.scheduledDate, true)} />
-              <Row label="الساعة:" value={nextPickup.timeSlot} />
-              <Row label="المندوب:" value={nextPickup.collectorName} />
-              <p className="rounded-lg bg-emerald-50 p-3 text-sm text-brand-dark">
-                اعرض هذا الكود للمندوب عند وصوله ليمسحه ويؤكد الاستلام.
-              </p>
-            </div>
-            <div className="mx-auto rounded-xl border border-slate-200 bg-white p-3 shadow-sm" dir="ltr">
-              <QRCodeSVG value={nextPickup.qrToken} size={160} role="img" aria-label="كود QR لتأكيد التسليم" />
-            </div>
-          </div>
-        ) : (
-          <p className="text-slate-500">لا توجد زيارة مجدولة حاليًا.</p>
-        )}
-      </Card>
+      <div className="grid gap-4 @4xl:grid-cols-2">
+        <div className="grid">
+          <Card title="الزيارة القادمة">
+            {nextPickup ? (
+              <div className="@container">
+                <div className="grid items-center gap-5 @md:grid-cols-[1fr_auto]">
+                  <div className="space-y-2">
+                    <Row label="الموعد:" value={fmtDate(nextPickup.scheduledDate, true)} />
+                    <Row label="الساعة:" value={nextPickup.timeSlot} />
+                    <Row label="المندوب:" value={nextPickup.collectorName} />
+                    <p className="rounded-lg bg-emerald-50 p-3 text-sm text-brand-dark">
+                      اعرض هذا الكود للمندوب عند وصوله ليمسحه ويؤكد الاستلام.
+                    </p>
+                  </div>
+                  <div className="mx-auto rounded-xl border border-slate-200 bg-white p-3 shadow-sm" dir="ltr">
+                    <QRCodeSVG value={nextPickup.qrToken} size={160} role="img" aria-label="كود QR لتأكيد التسليم" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-slate-500">لا توجد زيارة مجدولة حاليًا.</p>
+            )}
+          </Card>
+        </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="sm:col-span-2">
+        <div className="grid content-start gap-4">
           <Card title="التارجت الشهري">
             <div className="mb-3 flex items-center justify-between gap-2">
               <span className="text-2xl font-bold tabular-nums">
@@ -98,21 +102,20 @@ function Dashboard({ data }) {
             </div>
             <p className="mt-3 text-xs text-slate-500">يُحتسب الوزن بعد اعتماد الإدارة للشحنة.</p>
           </Card>
-        </div>
 
-        <Card title="محفظة النقاط">
-          <p className="text-3xl font-bold text-gold tabular-nums">
-            {data.pointsWallet.toLocaleString('en-US')} <span className="text-base font-normal text-slate-500">نقطة</span>
-          </p>
-          <p className="mt-2 text-xs text-slate-500">تُضاف النقاط بعد اعتماد الإدارة للشحنة.</p>
-        </Card>
+          <Card title="محفظة النقاط">
+            <p className="text-3xl font-bold text-gold tabular-nums">
+              {data.pointsWallet.toLocaleString('en-US')} <span className="text-base font-normal text-slate-500">نقطة</span>
+            </p>
+            <p className="mt-2 text-xs text-slate-500">تُضاف النقاط بعد اعتماد الإدارة للشحنة.</p>
+          </Card>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
 export default function CompanyPage() {
-  const { session, logout } = useGuard('company');
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
 
@@ -121,13 +124,11 @@ export default function CompanyPage() {
   }, []);
 
   useEffect(() => {
-    if (session) load();
-  }, [session, load]);
-
-  if (!session) return <Loading />;
+    load();
+  }, [load]);
 
   return (
-    <Shell title="لوحة الشركة" user={session.user.fullname} onLogout={logout}>
+    <>
       <Alert>{error}</Alert>
       {error && !data && (
         <button
@@ -143,6 +144,6 @@ export default function CompanyPage() {
       )}
       {!data && !error && <Loading />}
       {data && <Dashboard data={data} />}
-    </Shell>
+    </>
   );
 }
