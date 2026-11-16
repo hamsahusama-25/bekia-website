@@ -5,16 +5,15 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-brand: #047857;
+ --color-brand: #047857;
   --color-brand-dark: #065f46;
   --color-ink: #0f172a;
   --color-gold: #d97706;
   --color-alert: #dc2626;
-  --font-sans: "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, sans-serif;
 }
 
 body {
-  background: #f8fafc;
+  background: #f4f4f4;
   color: var(--color-ink);
 }
 
@@ -24,6 +23,12 @@ body {
 }
 
 @theme inline {
+
+  --font-sans: var(--font-almarai), "Segoe UI", Tahoma, system-ui, sans-serif;
+  --font-heading: var(--font-alexandria), var(--font-almarai), sans-serif;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -145,4 +150,8 @@ body {
   html {
     @apply font-sans;
   }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
 }

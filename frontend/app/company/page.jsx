@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { api, errorMessage } from '@/lib/api';
-import { useGuard } from '@/lib/useGuard';
-import { Alert, Card, Loading, Shell, FREQUENCY_AR, LEVEL_STYLE } from '@/components/ui';
+import { Alert, Card, Loading, FREQUENCY_AR, LEVEL_STYLE } from '@/components/ui';
 
 const fmtDate = (iso, weekday = false) =>
   new Date(iso).toLocaleDateString('ar-EG', {
