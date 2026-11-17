@@ -38,7 +38,7 @@ const alexandria = localFont({
 });
 
 export const metadata = {
-  title: "Eco Loop",
+  title: "Bekia - منصة إدارة المخلفات وإعادة التدوير للشركات",
   description: "منصة إدارة المخلفات وإعادة التدوير للشركات",
 };
 
@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
       dir="rtl"
       className={cn(almarai.variable, alexandria.variable)}
     >
-      <body className="min-h-screen font-sans antialiased">
+      <body className="min-h-screen w-full font-sans antialiased">
         {children}
       </body>
     </html>
