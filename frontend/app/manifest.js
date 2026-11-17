@@ -2,8 +2,8 @@
 // There is no service worker yet, so the app is not usable offline (see docs/10-testing.md, limits).
 export default function manifest() {
   return {
-    name: 'Loop Eco',
-    short_name: 'Loop Eco',
+    name: 'Pickea',
+    short_name: 'Pickea',
     description: 'منصة إدارة المخلفات وإعادة التدوير للشركات',
     start_url: '/',
     display: 'standalone',
