@@ -2,6 +2,7 @@
 
 const crypto = require('node:crypto');
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const config = require('../config');
 const { Company, Pickup } = require('../models');
 const { requireAuth, requireApprovedCollector } = require('../middleware/auth');
@@ -14,6 +15,22 @@ const { AppError, badRequest, notFound, conflict } = require('../lib/errors');
 const { ok } = require('../lib/respond');
 
 const router = express.Router();
+
+// Limits handover submissions per collector (not per IP) so a shared network does not lock others out.
+const completeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.user.sub,
+  skip: () => config.env === 'test',
+  handler: (req, res) =>
+    res.status(429).json({
+      success: false,
+      requestId: req.requestId,
+      error: { code: 'TOO_MANY_REQUESTS', message: 'Too many attempts, try again later' },
+    }),
+});
 
 function safeEqual(a, b) {
   const x = Buffer.from(String(a));
@@ -38,6 +55,7 @@ router.post(
   '/:id/complete',
   requireAuth('collector'),
   requireApprovedCollector,
+  completeLimiter,
   upload.single('scalePhoto'),
   async (req, res) => {
     let rawItems;
