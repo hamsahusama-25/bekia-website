@@ -24,6 +24,14 @@ test('redact: masks passwords, tokens, QR and documents, keeps normal fields', (
   assert.equal(out.list[0].token, '***REDACTED***');
 });
 
+test('redact: masks OTP values (otp, otpHash, otpCode) but not keys that merely contain "otp"', () => {
+  const out = redact({ otp: '123456', otpHash: 'h', otpCode: '654321', footprint: 'kept' });
+  assert.equal(out.otp, '***REDACTED***');
+  assert.equal(out.otpHash, '***REDACTED***');
+  assert.equal(out.otpCode, '***REDACTED***');
+  assert.equal(out.footprint, 'kept');
+});
+
 test('redact: does not mutate the input', () => {
   const input = { password: 'x' };
   redact(input);

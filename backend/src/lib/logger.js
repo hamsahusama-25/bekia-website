@@ -1,6 +1,6 @@
 'use strict';
 
-const SENSITIVE_KEYS = /pass(word)?|hash|token|secret|authorization|qr|faceid|nationalid|criminalrecord/i;
+const SENSITIVE_KEYS = /pass(word)?|hash|token|secret|authorization|qr|faceid|nationalid|criminalrecord|^otp/i;
 
 /** Deep-copies a value, replacing the value of any sensitive-looking key. */
 function redact(value, depth = 0) {
