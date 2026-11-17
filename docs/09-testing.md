@@ -67,3 +67,30 @@ cd backend && npm test                    # الكل؛ يشغّل mongod مؤق�
 - **لا توجد اختبارات آلية للواجهة** (component/e2e) في الـ MVP؛ التغطية الحالية من الـ build والاختبار اليدوي أعلاه. إضافة Playwright خطوة مقترحة.
 - **الـ rate limit** غير مغطى باختبار آلي (يتخطاه وضع الاختبار عمدًا حتى لا يعطل باقي الاختبارات).
 - الـ GPS قابل للتزوير من أدوات المطور (انظر `07-trust-boundaries.md`).
+
+## 6. Traceability: User Story ↔ automated tests
+
+> الجدول ده بيربط كل User Story من الـ Product Backlog (النطاق الحالي) بالاختبارات الآلية الموجودة فعلًا في `backend/test/`. الربط تم من أسماء الاختبارات والـ error codes اللي بتتحقق منها، وليس من قراءة كل assertion. "Gap" معناها مفيش اختبار آلي يغطي النقطة دي.
+> مش داخل هنا: User Stories الخاصة بـ OTP و HQ activation (في انتظار قرار)، ولا الواجهة (مفيش اختبارات آلية للـ frontend، انظر القسم 5).
+
+| US | Covered by (file :: test) | Gap |
+|---|---|---|
+| US-01 | `integration/journey` :: registers two companies and never returns the password hash · rejects a duplicate email (409) and an unknown package (400) — `unit/schemas` :: register payloads · extra fields stripped — `api/security` :: NEG-01 | Extra fields are **stripped**, not rejected (the Backlog says "rejected") |
+| US-03 | `integration/journey` :: login (401 INVALID_CREDENTIALS, phone and email) — `api/security` :: no token / garbage / expired / `alg=none` tokens · NoSQL operator payload | The 30 requests / 15 min limit is not tested (skipped in test mode) |
+| US-04 | `api/security` :: NEG-01 — `unit/schemas` :: role "admin" is rejected | — |
+| US-10 | `integration/journey` :: company dashboard shows contract, target, wallet · approval updates weight, level and wallet | — |
+| US-12 | `integration/journey` :: admin approves the collector and assigns both companies (duplicate slot returns 409) | Scheduling with a non-approved collector (409) is not tested |
+| US-13 | — | **Gap:** `PAST_DATE` (400) and `CONTRACT_EXPIRED` (409) are not tested |
+| US-14 | `integration/journey` :: smart route orders stops nearest-first using $geoNear — `unit/geo` :: pipeline starts with $geoNear | Empty state (no pickups) is not tested |
+| US-15 | `integration/journey` :: collector progress counts the served company | — |
+| US-20 | `unit/lib` :: images by magic bytes · stored names (path traversal) — `integration/journey` :: NEG-02 fake image · non-images rejected · scale photos served to admins only | The 5 MB size limit is not tested |
+| US-21 | `integration/journey` :: NEG-04 (far = 400 GPS_VERIFICATION_FAILED, near = NO_SHOW, repeat = 409) — `unit/geo` :: haversine | — |
+| US-22 | `integration/journey` :: success case PENDING_REVIEW · only an admin can approve (re-approval = 409 PICKUP_NOT_PENDING) | — |
+| US-23 | `unit/points` :: level and points (5 tests) — `integration/journey` :: approval with target bonus | — |
+| US-24 | `unit/lib` :: business-timezone day and month keys | A shipment approved right at the month boundary is not tested end to end |
+| US-25 | `integration/journey` :: second approval returns 409 PICKUP_NOT_PENDING | **Gap:** two simultaneous approvals (race) are not tested |
+| US-26 | `integration/journey` :: admin stats summarize the month | — |
+| US-27 | `integration/journey` :: admin changes package price and discount; a company cannot | — |
+| US-28 | `api/security` :: X-Request-Id · health 503 — `integration/journey` :: health is UP — `unit/lib` :: redact (3 tests, including `otp`) | — |
+| US-29 | — | **Gap:** login, sign-up and `complete` rate limits are not tested (skipped in test mode) |
+| US-40 to US-43 | — | No automated frontend tests (manual only, see section 5) |
