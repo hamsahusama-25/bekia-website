@@ -2,7 +2,7 @@ import React from 'react'
 
 const visits = () => {
   return (
-    <div>visits</div>
+    <div>visits Sa3d</div>
   )
 }
 
