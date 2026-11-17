@@ -141,7 +141,7 @@ git clone <repo-url> loop-eco && cd loop-eco
 
 cp .env.example .env            # ثم غيّر JWT_SECRET لقيمة عشوائية
 docker compose up -d --build    # يبني ويشغّل MongoDB + Backend + Frontend
-docker compose exec backend npm run seed   # بيانات تجريبية + حساب الأدمن
+docker compose exec backend npm run seed -- --force   # بيانات تجريبية + حساب الأدمن
 ```
 
 بعد التشغيل:
@@ -167,7 +167,7 @@ docker compose exec backend npm run seed   # بيانات تجريبية + حس�
 ```bash
 docker compose logs -f backend                 # لوجات الـ API
 docker compose exec backend npm run migrate    # يتأكد إن كل الـ indexes موجودة (منها 2dsphere)
-docker compose exec backend npm run seed       # يمسح كل البيانات ويعيد التعبئة (للتطوير فقط)
+docker compose exec backend npm run seed -- --force       # يمسح كل البيانات ويعيد التعبئة (للتطوير فقط)
 docker compose down                            # إيقاف
 docker compose down -v                         # إيقاف + مسح قاعدة البيانات والملفات المرفوعة
 ```
@@ -193,7 +193,7 @@ npm test             # كل حاجة بما فيها integration (بينزّل m
 
 - [ ] `git clone` ثم `cp .env.example .env` ثم `docker compose up -d --build` بدون أخطاء
 - [ ] `docker compose ps` يظهر الثلاث حاويات `healthy` / `running`
-- [ ] `docker compose exec backend npm run seed` ينتهي بـ `seed complete`
+- [ ] `docker compose exec backend npm run seed -- --force` ينتهي بـ `seed complete`
 - [ ] `curl http://localhost:5000/api/health` يرجع `200` و `"status":"UP"`
 - [ ] http://localhost:3000 يفتح صفحة الدخول بالعربي من اليمين لليسار
 - [ ] دخول بـ `ecoloop_admin` يفتح لوحة الإدارة وتظهر الإحصائيات
@@ -249,7 +249,7 @@ npm test             # كل حاجة بما فيها integration (بينزّل m
 ## 7. إعادة ضبط قاعدة البيانات (Reset & Reseed)
 
 ```bash
-docker compose exec backend npm run seed
+docker compose exec backend npm run seed -- --force
 ```
 
 الأمر بيمسح كل الـ collections ثم يبني الـ indexes ثم يضيف البيانات التجريبية. بيرفض يشتغل لو `NODE_ENV=production` إلا بـ `--force`.
