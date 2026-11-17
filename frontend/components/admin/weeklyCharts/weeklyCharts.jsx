@@ -10,7 +10,7 @@ export default function WasteChart() {
   const [pickups, setPickups] = useState([]);
 
   useEffect(() => {
-    api.get('/admin/pickups?status=APPROVED')
+    api.get('/admin/pickups?status=COMPLETED')
       .then(setPickups)
       .catch(console.error);
   }, []);
