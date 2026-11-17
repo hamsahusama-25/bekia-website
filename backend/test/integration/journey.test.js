@@ -23,6 +23,9 @@ const PNG = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a
 const AT_A = { lng: 32.5498, lat: 29.9668 };
 const AT_B = { lng: 31.2357, lat: 30.0444 };
 
+// 'YYYY-MM-DD' in the business time zone, n days from today (negative = past).
+const daysFromToday = (n) => todayLocal(new Date(Date.now() + n * 24 * 60 * 60 * 1000));
+
 describe('first user journey', () => {
   let db;
   let api;
@@ -192,6 +195,35 @@ describe('first user journey', () => {
 
     const dup = await mk(s.idA, '09:00');
     assert.equal(dup.status, 409);
+  });
+
+  it('US-13: scheduling in the past is 400 PAST_DATE, after the contract ends is 409 CONTRACT_EXPIRED', async () => {
+    const schedule = (scheduledDate) =>
+      api.post('/api/admin/pickups').set(auth(s.admin)).send({ companyId: s.idA, collectorId: s.collectorId, scheduledDate, timeSlot: '15:00' });
+
+    const past = await schedule(daysFromToday(-3));
+    assert.equal(past.status, 400, JSON.stringify(past.body));
+    assert.equal(past.body.error.code, 'PAST_DATE');
+
+    // The test package lasts 6 months, so a date ~27 months away is always after the contract end.
+    const expired = await schedule(daysFromToday(800));
+    assert.equal(expired.status, 409, JSON.stringify(expired.body));
+    assert.equal(expired.body.error.code, 'CONTRACT_EXPIRED');
+  });
+
+  it('US-12: scheduling with a collector who is not approved yet is 409 COLLECTOR_NOT_APPROVED', async () => {
+    const reg = await registerCollector(90);
+    assert.equal(reg.status, 201, JSON.stringify(reg.body));
+    const pending = await api.get('/api/admin/collectors?status=pending').set(auth(s.admin));
+    const unapproved = pending.body.data.find((c) => c.email === 'person90@example.com');
+    assert.ok(unapproved, 'the new collector should be listed as pending');
+
+    const res = await api
+      .post('/api/admin/pickups')
+      .set(auth(s.admin))
+      .send({ companyId: s.idA, collectorId: unapproved.id, scheduledDate: todayLocal(), timeSlot: '17:00' });
+    assert.equal(res.status, 409, JSON.stringify(res.body));
+    assert.equal(res.body.error.code, 'COLLECTOR_NOT_APPROVED');
   });
 
   it('company dashboard shows contract, target, wallet and the QR for the next pickup', async () => {
@@ -371,5 +403,31 @@ describe('first user journey', () => {
     assert.equal(res.body.data.priceEGP, 3000);
     const invalid = await api.put(`/api/admin/packages/${s.packageId}`).set(auth(s.admin)).send({ discountPercent: 150 });
     assert.equal(invalid.status, 400);
+  });
+
+  // Kept last: it adds one more completed pickup, which would change the totals asserted above.
+  it('US-25: two simultaneous approvals of the same shipment credit the points only once', async () => {
+    const created = await api
+      .post('/api/admin/pickups')
+      .set(auth(s.admin))
+      .send({ companyId: s.idA, collectorId: s.collectorId, scheduledDate: todayLocal(), timeSlot: '15:30' });
+    assert.equal(created.status, 201, JSON.stringify(created.body));
+    const pickupId = created.body.data.id;
+
+    const dash = await api.get('/api/company/dashboard').set(auth(s.companyA));
+    const walletBefore = dash.body.data.pointsWallet;
+    const qr = dash.body.data.nextPickup.qrToken;
+
+    const done = await completeBody(pickupId, s.collector, qr, [{ trashType: 'plastic', weightKg: 5 }]);
+    assert.equal(done.status, 200, JSON.stringify(done.body));
+
+    const approve = () => api.post(`/api/admin/pickups/${pickupId}/approve`).set(auth(s.admin));
+    const [first, second] = await Promise.all([approve(), approve()]);
+    assert.deepEqual([first.status, second.status].sort(), [200, 409]);
+    const loser = first.status === 409 ? first : second;
+    assert.equal(loser.body.error.code, 'PICKUP_NOT_PENDING');
+
+    const after = await api.get('/api/company/dashboard').set(auth(s.companyA));
+    assert.equal(after.body.data.pointsWallet, walletBefore + 50, '5 kg = 50 points, credited exactly once');
   });
 });
